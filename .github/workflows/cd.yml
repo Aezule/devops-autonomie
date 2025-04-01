@@ -31,10 +31,11 @@ jobs:
 
       - name: Build Helm Chart
         run: |
-          helm package ./helm-chart -d ./helm-chart/output  # Chemin mis à jour ici
+          helm package ./helm-chart -d ./helm/output
 
+  
       - name: Deploy Helm Chart
         run: |
-          helm upgrade --install devops-app ./helm-chart/output/devops-app-*.tgz \
+          helm upgrade --install main ./helm/output/chart-help-*.tgz \
           --set image.repository=${{ secrets.DOCKERHUB_USERNAME }}/devops-autonomie \
           --set image.tag=latest
