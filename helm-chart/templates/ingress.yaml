@@ -18,9 +18,9 @@ spec:
             pathType: ImplementationSpecific
             backend:
               service:
-                name: {{ include "devops-autonomie.fullname" $. }}
+                name: {{ include "devops-autonomie.fullname" . }}
                 port:
-                  number: {{ $.Values.service.port }}
+                  number: {{ .Values.service.port }}
           {{- end }}
     {{- end }}
 {{- end }}
