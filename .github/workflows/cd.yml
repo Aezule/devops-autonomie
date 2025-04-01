@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Install Helm
         uses: azure/setup-helm@v3
         with:
@@ -31,11 +31,14 @@ jobs:
 
       - name: Build Helm Chart
         run: |
-          helm package ./helm-chart -d ./helm/output
+          helm package ./helm-chart -d ./helm-chart/output
 
-  
+      - name: List files in output directory
+        run: |
+          ls ./helm-chart/output
+
       - name: Deploy Helm Chart
         run: |
-          helm upgrade --install main ./helm/output/chart-help-*.tgz \
-          --set image.repository=${{ secrets.DOCKERHUB_USERNAME }}/devops-autonomie \
+          helm upgrade --install main ./helm-chart/output/chart-help-*.tgz \
+          --set image.repository=${{ secrets.DOCKERHUB_USERNAME }}/chart-repository \
           --set image.tag=latest
