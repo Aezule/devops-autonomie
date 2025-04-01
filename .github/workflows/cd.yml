@@ -20,7 +20,7 @@ jobs:
         uses: azure/setup-helm@v3
         with:
           version: 'v3.10.0'
-      
+
       - name: Verify Helm Version
         run: helm version
 
@@ -36,5 +36,6 @@ jobs:
       - name: Deploy Helm Chart
         run: |
           helm upgrade --install devops-app ./helm/output/devops-app-*.tgz \
-          --set image.repository=${{ secrets.DOCKER_HUB_USERNAME }}/devops-autonomous \
+          --set image.repository=${{ secrets.DOCKERHUB_USERNAME }}/devops-autonomie \
           --set image.tag=latest
+  
