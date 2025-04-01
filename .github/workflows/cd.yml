@@ -1,41 +1,31 @@
-name: CD Pipeline
+name: Helm Deploy
 
 on:
-  workflow_dispatch:
-    inputs:
-      helm_release:
-        description: 'Helm'
-        required: true
-      namespace:
-        description: 'Kubernetes'
-        required: true
+  push:
+    branches:
+      - main 
 
 jobs:
-  deploy:
+  helm-deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
-      
-      - name: Install Helm
-        uses: azure/setup-helm@v3
-        with:
-          version: 'v3.10.0'
+    - name: Checkout repository
+      uses: actions/checkout@v2
 
-      - name: Verify Helm Version
-        run: helm version
+    - name: Set up Helm
+      uses: azure/setup-helm@v1
 
-      - name: Configure Kubernetes
-        uses: azure/k8s-set-context@v3
-        with:
-          kubeconfig: ${{ secrets.KUBE_CONFIG }}
+    - name: List helm folder contents for debugging
+      run: |
+        ls -R ./helm
 
-      - name: Build Helm Chart
-        run: |
-          helm package ./helm/devops-app -d ./helm/output
+    - name: Package Helm Chart
+      run: |
+        helm package ./helm -d ./helm/output
 
-      - name: Deploy Helm Chart
-        run: |
-          helm upgrade --install devops-app ./helm/output/devops-app-*.tgz \
-          --set image.repository=${{ secrets.DOCKERHUB_USERNAME }}/devops-autonomie \
-          --set image.tag=latest
-  
+    - name: Upload packaged Helm chart as artifact (optional)
+      uses: actions/upload-artifact@v2
+      with:
+        name: helm-chart
+        path: ./helm/output/*.tgz
