@@ -35,8 +35,11 @@ jobs:
       - name: build docker image
         run: docker build -t myusername/devops-autonomie:latest .
 
-      - name: run docker scout
-        run: docker scout cves myusername/devops-autonomie:latest
+      - name: Install Docker Scout
+        run: |
+          curl -fsSL https://raw.githubusercontent.com/docker/scout-cli/main/install.sh -o install-scout.sh
+          sh install-scout.sh
+          docker scout version  # Verify installation
 
       - name: log in to docker hub
         run: echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | docker login --username "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
