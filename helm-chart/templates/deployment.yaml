@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "helm-chart.fullname" . }}
+  name: {{ include "devops-autonomie.fullname" . }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: {{ include "helm-chart.name" . }}
+      app: {{ include "devops-autonomie.name" . }}
   template:
     metadata:
       labels:
-        app: {{ include "helm-chart.name" . }}
+        app: {{ include "devops-autonomie.name" . }}
     spec:
       containers:
-        - name: {{ include "helm-chart.name" . }}
+        - name: {{ include "devops-autonomie.name" . }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           ports:
             - containerPort: {{ .Values.service.port }}

@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  repository: Aezule/helm-chart
+  repository: Aezule/devops-autonomie
   tag: latest
   pullPolicy: IfNotPresent
 
@@ -13,7 +13,7 @@ ingress:
   enabled: true
   annotations: {}
   hosts:
-    - host: helm-chart.example.com
+    - host: devops-autonomie.example.com
       paths:
         - /
   tls: []

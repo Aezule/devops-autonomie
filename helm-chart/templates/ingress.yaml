@@ -2,7 +2,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ include "helm-chart.fullname" . }}
+  name: {{ include "devops-autonomie.fullname" . }}
   annotations:
     {{- range $key, $value := .Values.ingress.annotations }}
     {{ $key }}: {{ $value | quote }}
@@ -18,7 +18,7 @@ spec:
             pathType: ImplementationSpecific
             backend:
               service:
-                name: {{ include "helm-chart.fullname" . }}
+                name: {{ include "devops-autonomie.fullname" . }}
                 port:
                   number: {{ .Values.service.port }}
           {{- end }}
