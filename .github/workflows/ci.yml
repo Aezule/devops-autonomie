@@ -1,0 +1,45 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: set up python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.13
+
+      - name: install dependencies for linting and security testing
+        run: pip install flake8 bandit
+
+      - name: run flake8
+        run: flake8 .
+
+      - name: run bandit for security testing
+        run: bandit -r src/app.py --severity-level high
+
+  docker_build:
+    needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: build docker image
+        run: docker build -t myusername/devops-autonomie:latest .
+
+      - name: run docker scout
+        run: docker scout cves myusername/devops-autonomie:latest
+
+      - name: log in to docker hub
+        run: echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | docker login --username "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
+
+      - name: push docker image
+        run: docker push myusername/devops-autonomie:latest

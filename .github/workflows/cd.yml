@@ -1,0 +1,26 @@
+name: CD Pipeline
+
+on:
+  workflow_dispatch:
+    inputs:
+      helm_release:
+        description: 'Helm'
+        required: true
+      namespace:
+        description: 'Kubernetes'
+        required: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: set up kubectl
+        uses: azure/setup-kubectl@v3
+
+      - name: set up helm
+        uses: azure/setup-helm@v1
+
+      - name: deploy helm chart
+        run: helm upgrade --install ${{ github.event.inputs.helm_release }} ./helm-chart --namespace ${{ github.event.inputs.namespace }} --create-namespace
