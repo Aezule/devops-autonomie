@@ -32,13 +32,10 @@ jobs:
       - name: Build Helm Chart
         run: |
           helm package ./helm-chart -d ./helm-chart/output
-
-      - name: List files in output directory
-        run: |
-          ls ./helm-chart/output
+          ls -l ./helm-chart/output  # Vérifie le contenu du répertoire
 
       - name: Deploy Helm Chart
         run: |
-          helm upgrade --install main ./helm-chart/output/chart-help-*.tgz \
+          helm upgrade --install ${GITHUB_REF_NAME} ./helm-chart/output/chart-help-*.tgz \
           --set image.repository=${{ secrets.DOCKERHUB_USERNAME }}/chart-repository \
           --set image.tag=latest
