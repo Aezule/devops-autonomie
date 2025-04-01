@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "devops-autonomie.fullname" . }}
+  name: {{ include "helm-chart.fullname" . }}
 spec:
   type: {{ .Values.service.type }}
   ports:
     - port: {{ .Values.service.port }}
       targetPort: {{ .Values.service.port }}
   selector:
-    app: {{ include "devops-autonomie.name" . }}
+    app: {{ include "helm-chart.name" . }}
