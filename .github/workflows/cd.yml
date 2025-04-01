@@ -19,8 +19,11 @@ jobs:
       - name: set up kubectl
         uses: azure/setup-kubectl@v3
 
-      - name: set up helm
+      - name: Set up Helm
         uses: azure/setup-helm@v1
+        with:
+          helm-version: v3.17.0
+
 
       - name: deploy helm chart
         run: helm upgrade --install ${{ github.event.inputs.helm_release }} ./helm-chart --namespace ${{ github.event.inputs.namespace }} --create-namespace
